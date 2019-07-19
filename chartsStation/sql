@@ -1,0 +1,9 @@
+set @num := 0, @scode :='';
+select *, 
+@num := if (@scode = a.SECUCODE, @num + 1, 1) as row_number ,
+@scode := a.SECUCODE as dummy
+from  (select * from ma_fnd_assetallocation group by SECUCODE, ENDDATE  order by SECUCODE, ENDDATE desc) a
+
+GROUP BY a.SECUCODE, a.ENDDATE
+HAVING row_number <= 4
+ORDER BY a.SECUCODE, a.ENDDATE desc;
